@@ -20,6 +20,7 @@ class SendReplyJob < ApplicationJob
     channel_name = message.conversation.inbox.channel.class.to_s
 
     return send_on_facebook_page(message) if channel_name == 'Channel::FacebookPage'
+    return send_on_instagram(message) if channel_name == 'Channel::Instagram'
 
     service_class = CHANNEL_SERVICES[channel_name]
     return unless service_class
@@ -30,10 +31,23 @@ class SendReplyJob < ApplicationJob
   private
 
   def send_on_facebook_page(message)
-    if message.conversation.additional_attributes['type'] == 'instagram_direct_message'
+    case message.conversation.additional_attributes['type']
+    when 'instagram_direct_message'
       ::Instagram::Messenger::SendOnInstagramService.new(message: message).perform
+    when 'instagram_comment'
+      ::Instagram::CommentReplyService.new(message: message).perform
+    when 'facebook_comment'
+      ::Facebook::CommentReplyService.new(message: message).perform
     else
       ::Facebook::SendOnFacebookService.new(message: message).perform
+    end
+  end
+
+  def send_on_instagram(message)
+    if message.conversation.additional_attributes['type'] == 'instagram_comment'
+      ::Instagram::CommentReplyService.new(message: message).perform
+    else
+      ::Instagram::SendOnInstagramService.new(message: message).perform
     end
   end
 end

@@ -19,13 +19,36 @@ class Instagram::CallbacksController < ApplicationController
 
   # Process the authorization code and create inbox
   def process_successful_authorization
-    @response = instagram_client.auth_code.get_token(
-      oauth_code,
-      redirect_uri: "#{base_url}/#{provider_name}/callback",
-      grant_type: 'authorization_code'
+    token_redirect_uri = "#{base_url}/#{provider_name}/callback"
+    token_params = {
+      'client_id' => GlobalConfigService.load('INSTAGRAM_APP_ID', nil),
+      'client_secret' => GlobalConfigService.load('INSTAGRAM_APP_SECRET', nil),
+      'grant_type' => 'authorization_code',
+      'redirect_uri' => token_redirect_uri,
+      'code' => oauth_code
+    }
+    Rails.logger.info "[Instagram Callback] token exchange: client_id=#{token_params['client_id']} redirect_uri=#{token_redirect_uri} code_length=#{oauth_code&.length}"
+
+    raw_token_response = HTTParty.post(
+      'https://api.instagram.com/oauth/access_token',
+      body: token_params,
+      headers: { 'Content-Type' => 'application/x-www-form-urlencoded' }
     )
 
-    @long_lived_token_response = exchange_for_long_lived_token(@response.token)
+    Rails.logger.info "[Instagram Callback] raw token response: #{raw_token_response.code} #{raw_token_response.body}"
+
+    unless raw_token_response.success?
+      error_data = begin
+        JSON.parse(raw_token_response.body)
+      rescue StandardError
+        { 'error_type' => 'OAuthException', 'code' => raw_token_response.code,
+          'error_message' => raw_token_response.body }
+      end
+      raise StandardError, error_data.to_json
+    end
+
+    short_lived_token = JSON.parse(raw_token_response.body)['access_token']
+    @long_lived_token_response = exchange_for_long_lived_token(short_lived_token)
     inbox, already_exists = find_or_create_inbox
 
     if already_exists
@@ -56,8 +79,12 @@ class Instagram::CallbacksController < ApplicationController
         { 'error_type' => 'OAuthException', 'code' => 400, 'error_message' => error.message }
       end
     else
-      # For other unexpected errors
-      { 'error_type' => error.class.name, 'code' => 500, 'error_message' => error.message }
+      # Try to parse JSON message (e.g. from our HTTParty error path)
+      begin
+        JSON.parse(error.message)
+      rescue StandardError
+        { 'error_type' => error.class.name, 'code' => 500, 'error_message' => error.message }
+      end
     end
   end
 

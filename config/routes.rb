@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # Internal bot webhook (not exposed externally; only loopback calls from AgentBotListener)
+  namespace :internal do
+    post 'dm_bot/webhook', to: 'dm_bot#webhook'
+  end
+
   # AUTH STARTS
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
     confirmations: 'devise_overrides/confirmations',

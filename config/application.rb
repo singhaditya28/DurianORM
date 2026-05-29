@@ -11,6 +11,7 @@ Bundler.require(*Rails.groups)
 ## Load the specific APM agent
 # We rely on DOTENV to load the environment variables
 # We need these environment variables to load the specific APM agent
+Dotenv::Rails.overwrite = true
 Dotenv::Rails.load
 require 'datadog' if ENV.fetch('DD_TRACE_AGENT_URL', false).present?
 require 'elastic-apm' if ENV.fetch('ELASTIC_APM_SECRET_TOKEN', false).present?
@@ -66,6 +67,10 @@ module Chatwoot
     # https://discuss.rubyonrails.org/t/cve-2022-32224-possible-rce-escalation-bug-with-serialized-columns-in-active-record/81017
     # FIX ME : fixes breakage of installation config. we need to migrate.
     config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess]
+
+    # Intercept Facebook Page feed comment webhooks before the facebook-messenger gem
+    require Rails.root.join('app/middleware/facebook_comments_middleware')
+    config.middleware.use FacebookCommentsMiddleware
 
     # Disable PDF/video preview generation as we don't use them
     config.active_storage.previewers = []

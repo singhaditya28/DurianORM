@@ -40,15 +40,26 @@ class Webhooks::Trigger
 
   def perform_request
     body = @payload.to_json
-    SafeFetch.fetch(
-      @url,
-      method: :post,
-      body: body,
-      headers: request_headers(body),
-      open_timeout: webhook_timeout,
-      read_timeout: webhook_timeout,
-      validate_content_type: false
-    ) { |_response| nil }
+    if local_url?
+      HTTParty.post(@url, body: body, headers: request_headers(body), timeout: webhook_timeout)
+    else
+      SafeFetch.fetch(
+        @url,
+        method: :post,
+        body: body,
+        headers: request_headers(body),
+        open_timeout: webhook_timeout,
+        read_timeout: webhook_timeout,
+        validate_content_type: false
+      ) { |_response| nil }
+    end
+  end
+
+  def local_url?
+    host = URI.parse(@url).host
+    host == 'localhost' || host == '127.0.0.1'
+  rescue URI::InvalidURIError
+    false
   end
 
   def request_headers(body)

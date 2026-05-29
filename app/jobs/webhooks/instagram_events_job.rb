@@ -24,6 +24,13 @@ class Webhooks::InstagramEventsJob < MutexApplicationJob
   private
 
   def process_single_entry(entry)
+    # Changes array is used for both real comment webhooks AND Meta's test events.
+    # We distinguish by checking the field name inside changes.
+    if comment_event?(entry)
+      process_comments(entry)
+      return
+    end
+
     if test_event?(entry)
       process_test_event(entry)
       return
@@ -49,6 +56,22 @@ class Webhooks::InstagramEventsJob < MutexApplicationJob
 
   def agent_message_via_echo?(messaging)
     messaging[:message].present? && messaging[:message][:is_echo].present?
+  end
+
+  def comment_event?(entry)
+    entry[:changes].present? &&
+      entry[:changes].any? { |c| c[:field] == 'comments' || c['field'] == 'comments' }
+  end
+
+  def process_comments(entry)
+    ig_account_id = entry[:id]
+    entry[:changes]&.each do |change|
+      next unless change[:field].to_s == 'comments' || change['field'].to_s == 'comments'
+
+      value = (change[:value] || change['value'] || {}).with_indifferent_access
+      Rails.logger.info("Instagram comment event for account #{ig_account_id}: #{value}")
+      Instagram::CommentService.new(ig_account_id: ig_account_id, value: value).perform
+    end
   end
 
   def test_event?(entry)

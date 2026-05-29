@@ -58,7 +58,7 @@ class Messages::Facebook::MessageBuilder < Messages::Messenger::MessageBuilder
 
   def set_conversation_based_on_inbox_config
     if @inbox.lock_to_single_conversation
-      Conversation.where(conversation_params).order(created_at: :desc).first || build_conversation
+      dm_conversations.order(created_at: :desc).first || build_conversation
     else
       find_or_build_for_multiple_conversations
     end
@@ -66,10 +66,18 @@ class Messages::Facebook::MessageBuilder < Messages::Messenger::MessageBuilder
 
   def find_or_build_for_multiple_conversations
     # If lock to single conversation is disabled, we will create a new conversation if previous conversation is resolved
-    last_conversation = Conversation.where(conversation_params).where.not(status: :resolved).order(created_at: :desc).first
+    # Exclude comment-type conversations so DMs always land in a DM conversation, not a comment thread.
+    last_conversation = dm_conversations.where.not(status: :resolved).order(created_at: :desc).first
     return build_conversation if last_conversation.nil?
 
     last_conversation
+  end
+
+  # Returns conversations for this contact/inbox that are NOT comment-type.
+  # Prevents DM messages from being appended to Instagram/Facebook comment conversations.
+  def dm_conversations
+    Conversation.where(conversation_params)
+                .where("(additional_attributes->>'type') NOT LIKE '%comment%' OR additional_attributes->>'type' IS NULL")
   end
 
   def build_conversation

@@ -57,6 +57,7 @@ class Captain::BaseTaskService
 
   def execute_ruby_llm_request(model:, messages:, schema: nil, tools: [])
     credential = llm_credential
+    model = Llm::Config.configured_model.presence || model
 
     Llm::Config.with_api_key(credential[:api_key], api_base: api_base) do |context|
       chat = build_chat(context, model: model, messages: messages, schema: schema, tools: tools)

@@ -3,6 +3,11 @@ require 'ruby_llm'
 module Llm::Config
   DEFAULT_MODEL = 'gpt-4.1-mini'.freeze
 
+  # Runtime model — respects the superadmin "OpenAI Model" setting
+  def self.configured_model
+    InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_MODEL')&.value.presence || DEFAULT_MODEL
+  end
+
   class << self
     def initialized?
       @initialized ||= false

@@ -5,6 +5,11 @@ class Messages::Instagram::MessageBuilder < Messages::Instagram::BaseMessageBuil
 
   private
 
+  def find_conversation_scope
+    Conversation.where(conversation_params)
+                .where("additional_attributes ->> 'type' IS NULL OR additional_attributes ->> 'type' NOT IN ('instagram_comment', 'facebook_comment')")
+  end
+
   def get_story_object_from_source_id(source_id)
     url = "#{base_uri}/#{source_id}?fields=story,from&access_token=#{@inbox.channel.access_token}"
 

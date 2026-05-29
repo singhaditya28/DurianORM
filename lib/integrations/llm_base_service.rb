@@ -100,7 +100,8 @@ class Integrations::LlmBaseService
 
   def execute_ruby_llm_request(parsed_body)
     messages = parsed_body['messages']
-    model = parsed_body['model']
+    # Use the superadmin-configured model at runtime, falling back to whatever the service requested
+    model = Llm::Config.configured_model.presence || parsed_body['model']
     credential = llm_credential
 
     Llm::Config.with_api_key(credential[:api_key], api_base: api_base) do |context|
