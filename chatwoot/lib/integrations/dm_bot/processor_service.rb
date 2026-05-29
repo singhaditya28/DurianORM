@@ -1,0 +1,239 @@
+# frozen_string_literal: true
+
+# DM Bot processor: handles incoming DMs on Facebook/Instagram inboxes.
+# Sends a welcome option-menu on the first user message, routes based on
+# the chosen option, calls OpenAI for AI-backed replies, and hands off to
+# a human agent when needed.
+#
+# Setup (run once in Rails console):
+#   bot = AgentBot.create!(name: 'DM Bot', outgoing_url: 'http://localhost:3000/internal/dm_bot/webhook')
+#   # Assign to each inbox you want covered:
+#   InboxAgentBot.find_or_create_by!(inbox: Inbox.find(<id>)).update!(agent_bot: bot, active: true)
+#
+class Integrations::DmBot::ProcessorService < Integrations::BotProcessorService
+  pattr_initialize [:event_name!, :hook!, :event_data!]
+
+  MENU_OPTIONS = [
+    { title: '🛍️ Order Status',     value: 'order_status'    },
+    { title: '📚 Manga / Products', value: 'products'        },
+    { title: '🤖 Ask AI',           value: 'ask_ai'          },
+    { title: '👤 Talk to a Human',  value: 'human'           }
+  ].freeze
+
+  private
+
+  # Called by base class with (source_id, user_message_text)
+  def get_response(_session_id, content)
+    # Comments: skip menu entirely, just AI-reply (no option-select UI on public threads)
+    return ai_reply(content) if comment_conversation?
+
+    # On option selection the content is the submitted value string
+    if event_name == 'message.updated'
+      handle_option_selection(content)
+    elsif first_message?
+      :welcome_menu
+    else
+      ai_reply(content)
+    end
+  end
+
+  def comment_conversation?
+    type = event_data[:message].conversation.additional_attributes&.dig('type').to_s
+    type.include?('comment')
+  end
+
+  def process_response(message, response)
+    case response
+    when :welcome_menu
+      send_welcome_menu(message)
+    when :handoff
+      message.conversation.bot_handoff!
+    when :resolve
+      message.conversation.resolved!
+    when Hash
+      create_bot_message(message, response)
+    when String
+      create_bot_message(message, content: response)
+    end
+  end
+
+  # ── Option routing ────────────────────────────────────────────────────────
+
+  def handle_option_selection(value)
+    case value
+    when 'order_status'
+      { content: "Please share your order ID and we'll look it up for you!" }
+    when 'products'
+      { content: 'Check out our latest manga and merch at our store! What would you like to know more about?' }
+    when 'ask_ai'
+      # Bot stays active — next message will go through ai_reply
+      { content: "Sure! Go ahead and ask me anything. I'll do my best to help 🤖" }
+    when 'human'
+      :handoff
+    else
+      :welcome_menu
+    end
+  end
+
+  # ── Welcome menu ──────────────────────────────────────────────────────────
+
+  def send_welcome_menu(message)
+    create_bot_message(message, {
+                         content: 'Hey! 👋 Welcome to IComics / kisnemanga. How can I help you today?',
+                         content_type: 'input_select',
+                         content_attributes: {
+                           items: MENU_OPTIONS
+                         }
+                       })
+  end
+
+  # ── AI reply ─────────────────────────────────────────────────────────────
+
+  def ai_reply(user_content)
+    return :handoff if user_content.blank?
+
+    credential = llm_credential
+    unless credential
+      Rails.logger.warn('DmBot: no OpenAI API key configured, handing off')
+      return :handoff
+    end
+
+    model = Llm::Config.configured_model
+
+    Llm::Config.with_api_key(credential[:api_key]) do |ctx|
+      chat = ctx.chat(model: model)
+      chat.with_instructions(system_prompt)
+      replay_history(chat)
+      response = chat.ask(user_content)
+      content = response.content.to_s.strip
+      # Escalate if the AI signals it can't help
+      return :handoff if should_escalate?(content)
+
+      { content: content }
+    end
+  rescue StandardError => e
+    Rails.logger.error("DmBot AI error: #{e.message}")
+    send_failure_message(event_data[:message])
+    :handoff
+  end
+
+  # Replay prior turns so the LLM has conversation context (last 10 messages).
+  def replay_history(chat)
+    msgs = event_data[:message].conversation.messages
+                               .where(message_type: %i[incoming outgoing])
+                               .where(content_type: 'text')
+                               .where.not(id: event_data[:message].id)
+                               .order(:created_at)
+                               .last(10)
+    msgs.each do |m|
+      role = m.incoming? ? :user : :assistant
+      chat.add_message(role: role, content: m.content.to_s) if m.content.present?
+    end
+  end
+
+  def send_failure_message(message)
+    create_bot_message(message, content: "I'm having trouble right now. Let me connect you with a human! 🙏")
+  rescue StandardError => e
+    Rails.logger.error("DmBot failure-message error: #{e.message}")
+  end
+
+  def system_prompt
+    comment_conversation? ? comment_system_prompt : dm_system_prompt
+  end
+
+  def comment_system_prompt
+    <<~PROMPT
+      You are the social-media voice of IComics / kisnemanga, an Indian manga and
+      comics store, replying to a PUBLIC Instagram comment on one of our posts.
+
+      ── HARD RULES ────────────────────────────────────────────────────────
+      - Keep replies VERY short. Max ~12 words. One sentence ideally.
+      - Stay 100% professional, brand-safe, friendly. NEVER anything NSFW,
+        political, sarcastic, edgy, or controversial.
+      - If the comment is just an emoji, react with one fitting emoji
+        (optionally one or two warm words like "Thanks! 🙌").
+      - If the comment is positive / appreciative / hype ("love this", "🔥",
+        "amazing", "want one"), thank them warmly. Light emoji is fine.
+      - If the comment is a question, concern, complaint, order/price/stock
+        query, or anything that needs real back-and-forth, do NOT answer it
+        here. Politely redirect to DM with something like:
+          "Thanks for reaching out! Please DM us and we'll help you out 💌"
+      - If the comment is spam, abusive, NSFW, or off-topic, respond with
+        exactly the single word: HANDOFF
+      - Never mention prices, never quote stock, never make promises.
+      - Never use hashtags. Never @-mention anyone.
+    PROMPT
+  end
+
+  def dm_system_prompt
+    <<~PROMPT
+      You are a helpful customer support assistant for IComics / kisnemanga,
+      a manga and comics store. Be friendly, concise, and use emojis sparingly.
+
+      ── DEMO PRODUCT CATALOG ──────────────────────────────────────────────
+      1. Attack on Titan — Vol. 1 (English)     — ₹499  (SKU: AOT-V1)
+      2. One Piece — Vol. 1 (English)           — ₹549  (SKU: OP-V1)
+      3. Demon Slayer — Complete Box Set (1-23) — ₹8,999 (SKU: DS-BOX)
+      4. Naruto — Vol. 1 (English)              — ₹449  (SKU: NRT-V1)
+      5. Berserk — Deluxe Edition Vol. 1        — ₹2,499 (SKU: BRK-DLX1)
+
+      Shipping: Flat ₹99 across India. Free over ₹2,000. Delivery in 4-7 days.
+      Returns: 7-day return window, item must be unopened.
+
+      ── PLACING AN ORDER ──────────────────────────────────────────────────
+      You CAN take orders directly in chat. To place an order, conversationally
+      collect from the user (one or two items at a time, not a giant form):
+        1. Which product(s) + quantity
+        2. Full name
+        3. Shipping address (with PIN code)
+        4. Phone number
+
+      Once you have all four, confirm the total (items + shipping) and reply
+      with an order confirmation in this exact format on its own line:
+
+        ✅ Order placed! Order ID: #DEMO-<random 5 digits>
+        Items: <items>
+        Total: ₹<amount>
+        ETA: 4-7 days
+
+      ── WHEN TO HAND OFF ──────────────────────────────────────────────────
+      If the user asks for something outside this catalog (a product not listed,
+      a custom request, refunds, payment issues, or anything you genuinely
+      can't handle in chat), respond with EXACTLY the single word: HANDOFF
+      Do not say HANDOFF for normal product/order questions — only when you
+      truly need a human.
+    PROMPT
+  end
+
+  def should_escalate?(content)
+    content.strip.upcase == 'HANDOFF'
+  end
+
+  # ── Helpers ───────────────────────────────────────────────────────────────
+
+  def first_message?
+    # True when there are no prior outgoing bot messages in this conversation
+    conversation = event_data[:message].conversation
+    conversation.messages.where(message_type: :outgoing).none?
+  end
+
+  def create_bot_message(message, params)
+    conv = message.conversation
+    conv.messages.create!(
+      {
+        message_type: :outgoing,
+        account_id: conv.account_id,
+        inbox_id: conv.inbox_id,
+        content_type: 'text'
+      }.merge(params)
+    )
+  end
+
+  def llm_credential
+    # Prefer hook-level key, fall back to system key
+    key = InstallationConfig.find_by(name: 'CAPTAIN_OPEN_AI_API_KEY')&.value
+    return nil if key.blank?
+
+    { api_key: key }
+  end
+end

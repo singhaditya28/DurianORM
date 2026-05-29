@@ -1,0 +1,468 @@
+{
+  "CONVERSATION": {
+    "SELECT_A_CONVERSATION": "Lütfen sol bölmeden bir konuşma seçin",
+    "CSAT_REPLY_MESSAGE": "Lütfen görüşmeyi değerlendirin",
+    "404": "Maalesef konuşmayı bulamıyoruz. Lütfen tekrar deneyin",
+    "SWITCH_VIEW_LAYOUT": "Düzeni değiştir",
+    "DASHBOARD_APP_TAB_MESSAGES": "Mesajlar",
+    "UNVERIFIED_SESSION": "Bu kullanıcının kimliği doğrulanmadı",
+    "NO_MESSAGE_1": "Görünüşe göre gelen kutunuzda müşterilerden hiç mesaj yok.",
+    "NO_MESSAGE_2": "sayfanıza bir mesaj göndermek için!",
+    "NO_INBOX_1": "Görünüşe göre henüz gelen kutusu eklemediniz.",
+    "NO_INBOX_2": "başlamak",
+    "NO_INBOX_AGENT": "Görünüşe göre herhangi bir gelen kutusunun parçası değilsiniz. Lütfen yöneticinizle iletişime geçin",
+    "SEARCH_MESSAGES": "Sohbetlerde ara",
+    "VIEW_ORIGINAL": "View original",
+    "VIEW_TRANSLATED": "View translated",
+    "EMPTY_STATE": {
+      "CMD_BAR": "komut menüsünü açmak için",
+      "KEYBOARD_SHORTCUTS": "klavye kısayollarını görmek için"
+    },
+    "SEARCH": {
+      "TITLE": "Mesajları ara",
+      "RESULT_TITLE": "Arama Sonucu",
+      "LOADING_MESSAGE": "Veriler işleniyor ...",
+      "PLACEHOLDER": "Mesajları aramak için herhangi bir metin yazın",
+      "NO_MATCHING_RESULTS": "Sonuç bulunamadı."
+    },
+    "UNREAD_MESSAGES": "Okunmamış Mesajlar",
+    "UNREAD_MESSAGE": "Okunmamış Mesaj",
+    "CLICK_HERE": "Buraya Tıkla",
+    "LOADING_INBOXES": "Gelen kutuları yükleniyor",
+    "LOADING_CONVERSATIONS": "Sohbetler Yükleniyor\n",
+    "CANNOT_REPLY": "Nedeniyle cevap veremezsiniz",
+    "24_HOURS_WINDOW": "24 saat mesaj penceresi kısıtlaması",
+    "48_HOURS_WINDOW": "48 saat mesaj penceresi kısıtlaması",
+    "API_HOURS_WINDOW": "Bu konuşmaya yalnızca {hours} saat içinde cevap verebilirsiniz",
+    "NOT_ASSIGNED_TO_YOU": "Bu görüşme size atanmamış. Bu konuşmayı kendinize atamak ister misiniz?",
+    "ASSIGN_TO_ME": "Bana ata",
+    "BOT_HANDOFF_MESSAGE": "Şu anda bir asistan veya bot tarafından yürütülen bir konuşmaya yanıt veriyorsunuz.",
+    "BOT_HANDOFF_ACTION": "Size atayın ve açık olarak işaretleyin",
+    "BOT_HANDOFF_REOPEN_ACTION": "Konuşmayı açık olarak işaretle",
+    "BOT_HANDOFF_SUCCESS": "Konuşma size devredildi",
+    "BOT_HANDOFF_ERROR": "Konuşma devralınamadı. Lütfen tekrar deneyin.",
+    "TWILIO_WHATSAPP_CAN_REPLY": "Bu konuşmaya yalnızca şablon mesaj kullanarak yanıt verebilirsiniz, çünkü",
+    "TWILIO_WHATSAPP_24_HOURS_WINDOW": "24 saat mesaj penceresi kısıtlaması",
+    "OLD_INSTAGRAM_INBOX_REPLY_BANNER": "Bu Instagram hesabı, yeni Instagram kanal gelen kutusuna taşındı. Tüm yeni mesajlar orada görünecektir. Artık bu konuşmadan mesaj gönderemeyeceksiniz.",
+    "REPLYING_TO": "Cevap veriyorsun:",
+    "REMOVE_SELECTION": "Seçimi Kaldır",
+    "DOWNLOAD": "İndir",
+    "UNKNOWN_FILE_TYPE": "Bilinmeyen Dosya",
+    "SAVE_CONTACT": "Save Contact",
+    "NO_CONTENT": "No content to display",
+    "SHARED_ATTACHMENT": {
+      "CONTACT": "{sender} has shared a contact",
+      "LOCATION": "{sender} has shared a location",
+      "FILE": "{sender} has shared a file",
+      "MEETING": "{sender} bir toplantı başlattı"
+    },
+    "UPLOADING_ATTACHMENTS": "Dosyalar gönderiliyor...",
+    "REPLIED_TO_STORY": "Hikayene cevap verildi",
+    "UNSUPPORTED_MESSAGE": "This message is unsupported. You can view this message on the Facebook / Instagram app.",
+    "UNSUPPORTED_MESSAGE_FACEBOOK": "Bu mesaj desteklenmiyor. Bu mesajı Facebook Messenger uygulamasında görüntüleyebilirsiniz.",
+    "UNSUPPORTED_MESSAGE_INSTAGRAM": "Bu mesaj desteklenmiyor. Bu mesajı Instagram uygulamasında görüntüleyebilirsiniz.",
+    "UNSUPPORTED_MESSAGE_TIKTOK": "This message is unsupported. You can view this message on the TikTok app.",
+    "SUCCESS_DELETE_MESSAGE": "Mesaj başarıyla silindi",
+    "FAIL_DELETE_MESSSAGE": "Mesaj silinemiyor. Tekrar deneyin",
+    "NO_RESPONSE": "Cevap Yok",
+    "RESPONSE": "Response",
+    "RATING_TITLE": "Değerlendirme",
+    "FEEDBACK_TITLE": "Geribildirim",
+    "REPLY_MESSAGE_NOT_FOUND": "Mesaj bulunamadı",
+    "CARD": {
+      "SHOW_LABELS": "Etiketleri Göster",
+      "HIDE_LABELS": "Etiketleri Gizle",
+      "LABELS_COUNT": "{count} labels"
+    },
+    "VOICE_CALL": {
+      "INCOMING_CALL": "Gelen arama",
+      "OUTGOING_CALL": "Giden arama",
+      "CALL_IN_PROGRESS": "Arama devam ediyor",
+      "NO_ANSWER": "Yanıt yok",
+      "MISSED_CALL": "Cevapsız arama",
+      "CALL_ENDED": "Arama sona erdi",
+      "NOT_ANSWERED_YET": "Henüz yanıtlanmadı",
+      "THEY_ANSWERED": "Onlar yanıtladı",
+      "YOU_ANSWERED": "Siz yanıtladınız",
+      "AGENT_ANSWERED": "{agentName} answered",
+      "JOIN_CALL": "Join call"
+    },
+    "HEADER": {
+      "RESOLVE_ACTION": "Çözüldü",
+      "REOPEN_ACTION": "Yeniden aç",
+      "OPEN_ACTION": "Açık",
+      "MORE_ACTIONS": "Daha fazla işlem",
+      "OPEN": "Devamı",
+      "CLOSE": "Kapat",
+      "DETAILS": "detaylar",
+      "COPY_ID_SUCCESS": "Conversation ID copied to clipboard",
+      "SNOOZED_UNTIL": "Susturulacak kadar ertelendi",
+      "SNOOZED_UNTIL_TOMORROW": "yarına ertelendi",
+      "SNOOZED_UNTIL_NEXT_WEEK": "Önümüzdeki haftaya ertelendi",
+      "SNOOZED_UNTIL_NEXT_REPLY": "Bir sonraki yanıta kadar ertelendi",
+      "SLA_STATUS": {
+        "FRT": "FRT {status}",
+        "NRT": "NRT {status}",
+        "RT": "RT {status}",
+        "MISSED": "missed",
+        "DUE": "due"
+      }
+    },
+    "RESOLVE_DROPDOWN": {
+      "MARK_PENDING": "Beklemede olarak işaretle",
+      "SNOOZE_UNTIL": "Sustur",
+      "SNOOZE": {
+        "TITLE": "Şu tarihe kadar ertele",
+        "NEXT_REPLY": "Sonraki yanıt",
+        "TOMORROW": "Yarın",
+        "NEXT_WEEK": "Sonraki hafta"
+      }
+    },
+    "MENTION": {
+      "AGENTS": "Kullanıcılar",
+      "TEAMS": "Ekipler"
+    },
+    "CUSTOM_SNOOZE": {
+      "TITLE": "Şu tarihe kadar ertele",
+      "APPLY": "Sustur",
+      "CANCEL": "İptal Et"
+    },
+    "PRIORITY": {
+      "TITLE": "Öncelik",
+      "OPTIONS": {
+        "NONE": "Hiçbiri",
+        "URGENT": "Acil",
+        "HIGH": "Yüksek",
+        "MEDIUM": "Orta",
+        "LOW": "Düşük"
+      },
+      "CHANGE_PRIORITY": {
+        "SELECT_PLACEHOLDER": "Hiçbiri",
+        "INPUT_PLACEHOLDER": "Öncelik seçin",
+        "NO_RESULTS": "Sonuç bulunamadı",
+        "SUCCESSFUL": "Sohbet kimliği {conversationId} önceliği {priority} olarak değiştirildi",
+        "FAILED": "Öncelik değiştirilemedi. Lütfen tekrar deneyin."
+      }
+    },
+    "DELETE_CONVERSATION": {
+      "TITLE": "#{conversationId} numaralı konuşmayı sil",
+      "DESCRIPTION": "Bu konuşmayı silmek istediğinizden emin misiniz?",
+      "CONFIRM": "Sil"
+    },
+    "CARD_CONTEXT_MENU": {
+      "PENDING": "Beklemede olarak işaretle",
+      "RESOLVED": "Çözüldü olarak işaretle",
+      "MARK_AS_UNREAD": "Okunmamış olarak işaretle",
+      "MARK_AS_READ": "Okundu olarak işaretle",
+      "REOPEN": "Görüşmeyi yeniden açın",
+      "SNOOZE": {
+        "TITLE": "Sustur",
+        "NEXT_REPLY": "Sonraki yanıta kadar",
+        "TOMORROW": "Yarına kadar",
+        "NEXT_WEEK": "Gelecek haftaya kadar"
+      },
+      "ASSIGN_AGENT": "Temsilci ata",
+      "ASSIGN_LABEL": "Etiket ata",
+      "AGENTS_LOADING": "Temsilciler Yükleniyor...",
+      "ASSIGN_TEAM": "Takım ata",
+      "DELETE": "Konuşmayı sil",
+      "OPEN_IN_NEW_TAB": "Yeni sekmede aç",
+      "COPY_LINK": "Konuşma bağlantısını kopyala",
+      "COPY_LINK_SUCCESS": "Konuşma bağlantısı panoya kopyalandı",
+      "API": {
+        "AGENT_ASSIGNMENT": {
+          "SUCCESFUL": "Sohbet kimliği {conversationId} \"{agentName}\" tarafından atanmış",
+          "FAILED": "Temsilci atanamadı. Lütfen tekrar deneyin."
+        },
+        "LABEL_ASSIGNMENT": {
+          "SUCCESFUL": "Assigned label #{labelName} to conversation id {conversationId}",
+          "FAILED": "Etiket atanamadı. Lütfen tekrar deneyin."
+        },
+        "LABEL_REMOVAL": {
+          "SUCCESFUL": "Removed label #{labelName} from conversation id {conversationId}",
+          "FAILED": "Couldn't remove label. Please try again."
+        },
+        "TEAM_ASSIGNMENT": {
+          "SUCCESFUL": "Sohbet kimliği {conversationId} için \"{team}\" takımına atanmış",
+          "FAILED": "Takım atanamadı. Lütfen tekrar deneyin."
+        }
+      }
+    },
+    "FOOTER": {
+      "MESSAGE_SIGN_TOOLTIP": "İmzanız",
+      "ENABLE_SIGN_TOOLTIP": "İmzayı etkinleştir",
+      "DISABLE_SIGN_TOOLTIP": "İmzayı devre dışı bırak",
+      "MSG_INPUT": "Yeni satır için Shift + enter. Bir Hazır Yanıt seçmek için \"/\" ile başlayın.",
+      "PRIVATE_MSG_INPUT": "Yeni satır için Shift + enter. Bu yalnızca Temsilciler tarafından görülebilir",
+      "MESSAGING_RESTRICTED": "You cannot reply to this conversation",
+      "MESSAGING_RESTRICTED_WHATSAPP": "You can only reply using a template message due to 24-hour message window restriction",
+      "MESSAGING_RESTRICTED_API": "You can only reply using a template message due to message window restriction",
+      "MESSAGE_SIGNATURE_NOT_CONFIGURED": "Mesaj imzası yapılandırılmamış, lütfen profil ayarlarında yapılandırın.",
+      "COPILOT_MSG_INPUT": "Copilot için ek komutlar verin veya başka bir şey sorun... Takip için gönder tuşuna basın",
+      "CLICK_HERE": "Güncellemek için tıklayın",
+      "WHATSAPP_TEMPLATES": "WhatsApp Şablonları"
+    },
+    "REPLYBOX": {
+      "REPLY": "Cevapla",
+      "PRIVATE_NOTE": "Özel Not",
+      "SEND": "Gönder",
+      "CREATE": "Not ekle",
+      "INSERT_READ_MORE": "Daha fazla oku",
+      "DISMISS_REPLY": "Cevabı reddet",
+      "REPLYING_TO": "Cevap veriliyor:",
+      "TIP_EMOJI_ICON": "Emojileri göster",
+      "TIP_ATTACH_ICON": "Dosya ekle",
+      "TIP_AUDIORECORDER_ICON": "Ses kaydet",
+      "TIP_AUDIORECORDER_PERMISSION": "Mikrofon erişimine izin ver",
+      "TIP_AUDIORECORDER_ERROR": "Mikrofon açılamadı",
+      "DRAG_DROP": "Eklemek için buraya sürükleyip bırakın",
+      "START_AUDIO_RECORDING": "Ses kaydına başla",
+      "STOP_AUDIO_RECORDING": "Ses kaydını durdur",
+      "COPILOT_THINKING": "Copilot düşünüyor",
+      "EMAIL_HEAD": {
+        "TO": "TO",
+        "ADD_BCC": "Bcc ekle",
+        "CC": {
+          "LABEL": "CC",
+          "PLACEHOLDER": "Virgülle ayrılmış e-postalar",
+          "ERROR": "Lütfen geçerli bir e-posta adresi girin"
+        },
+        "BCC": {
+          "LABEL": "BCC",
+          "PLACEHOLDER": "Virgülle ayrılmış e-postalar",
+          "ERROR": "Lütfen geçerli bir e-posta adresi girin"
+        }
+      },
+      "UNDEFINED_VARIABLES": {
+        "TITLE": "Tanımsız değişkenler",
+        "MESSAGE": "Mesajınızda {undefinedVariablesCount} tanımsız değişken bulunmaktadır: {undefinedVariables}. Yine de mesajı göndermek ister misiniz?",
+        "CONFIRM": {
+          "YES": "Gönder",
+          "CANCEL": "İptal Et"
+        }
+      },
+      "QUOTED_REPLY": {
+        "ENABLE_TOOLTIP": "Alıntılanan e-posta zincirini dahil et",
+        "DISABLE_TOOLTIP": "Alıntılanan e-posta zincirini dahil etme",
+        "REMOVE_PREVIEW": "Alıntılanan e-posta zincirini kaldır",
+        "COLLAPSE": "Önizlemeyi daralt",
+        "EXPAND": "Önizlemeyi genişlet"
+      }
+    },
+    "VISIBLE_TO_AGENTS": "Özel Not: Yalnızca siz ve ekibiniz tarafından görülebilir",
+    "CHANGE_STATUS": "Görüşme durumu değişti",
+    "CHANGE_STATUS_FAILED": "Sohbet durumu değiştirilemedi",
+    "CHANGE_AGENT": "Atanan kişiyi değiştirildi",
+    "CHANGE_AGENT_FAILED": "Atanan kişi değiştirilemedi",
+    "ASSIGN_LABEL_SUCCESFUL": "Etiket başarıyla atandı",
+    "ASSIGN_LABEL_FAILED": "Etiket ataması yapılamadı",
+    "CHANGE_TEAM": "Takım değişti",
+    "SUCCESS_DELETE_CONVERSATION": "Konuşma başarıyla silindi",
+    "FAIL_DELETE_CONVERSATION": "Konuşma silinemedi! Tekrar deneyin",
+    "FILE_SIZE_LIMIT": "Dosya, {MAXIMUM_SUPPORTED_FILE_UPLOAD_SIZE} MB ek dosya sınırını aşıyor",
+    "FILE_TYPE_NOT_SUPPORTED": "This {fileName} file type is not supported in this conversation",
+    "MESSAGE_ERROR": "Bu mesaj gönderilemiyor, lütfen daha sonra tekrar deneyin",
+    "SENT_BY": "Tarafından gönderildi:",
+    "BOT": "Bot",
+    "NATIVE_APP": "Native app",
+    "NATIVE_APP_ADVISORY": "This message was sent from the native app. Reply from Chatwoot to maintain the message window.",
+    "SEND_FAILED": "Mesaj gönderilemedi! Tekrar deneyin",
+    "TRY_AGAIN": "tekrar dene",
+    "ASSIGNMENT": {
+      "SELECT_AGENT": "Temsilci Seçin",
+      "REMOVE": "Kaldır",
+      "ASSIGN": "Atama yap"
+    },
+    "CONTEXT_MENU": {
+      "COPY": "Kopyala",
+      "REPLY_TO": "Bu mesaja yanıtla",
+      "DELETE": "Sil",
+      "CREATE_A_CANNED_RESPONSE": "Hızlı cevaplara ekle",
+      "TRANSLATE": "Çevir",
+      "COPY_PERMALINK": "Mesajın bağlantısını kopyala",
+      "LINK_COPIED": "Mesaj URL'si panoya kopyalandı",
+      "DELETE_CONFIRMATION": {
+        "TITLE": "Bu mesajı silmek istediğinizden emin misiniz?",
+        "MESSAGE": "Bu eylemi geri alamazsınız",
+        "DELETE": "Sil",
+        "CANCEL": "İptal Et"
+      }
+    },
+    "SIDEBAR": {
+      "CONTACT": "İletişim",
+      "COPILOT": "Copilot"
+    },
+    "VOICE_WIDGET": {
+      "INCOMING_CALL": "Gelen arama",
+      "OUTGOING_CALL": "Giden arama",
+      "CALL_IN_PROGRESS": "Arama devam ediyor",
+      "NOT_ANSWERED_YET": "Henüz yanıtlanmadı",
+      "HANDLED_IN_ANOTHER_TAB": "Being handled in another tab",
+      "REJECT_CALL": "Reject",
+      "JOIN_CALL": "Join call",
+      "END_CALL": "End call"
+    }
+  },
+  "EMAIL_TRANSCRIPT": {
+    "TITLE": "E-posta İletişim Kaydını Gönder",
+    "DESC": "Belirtilen e-posta adresine konuşma dökümünün bir kopyasını gönderin",
+    "SUBMIT": "Gönder",
+    "CANCEL": "İptal Et",
+    "SEND_EMAIL_SUCCESS": "İletişim kaydı başarıyla gönderildi",
+    "SEND_EMAIL_ERROR": "Bir hata oluştu, lütfen tekrar deneyin",
+    "SEND_EMAIL_PAYMENT_REQUIRED": "Email transcript is not available on your current plan. Please upgrade to use this feature.",
+    "FORM": {
+      "SEND_TO_CONTACT": "İletişim kaydını müşteriye gönder",
+      "SEND_TO_AGENT": "Atanan temsilciye iletişim kaydını gönder",
+      "SEND_TO_OTHER_EMAIL_ADDRESS": "İletişim kaydını başka bir e-posta adresine gönder",
+      "EMAIL": {
+        "PLACEHOLDER": "Bir e-posta adresi girin",
+        "ERROR": "Lütfen geçerli bir e-posta adresi girin"
+      }
+    }
+  },
+  "ONBOARDING": {
+    "TITLE": "Merhaba 👋, {installationName}'a hoş geldiniz!",
+    "DESCRIPTION": "Üyeliğiniz için teşekkür ederiz. {installationName}'dan en iyi şekilde faydalanmanızı istiyoruz. Deneyimi daha keyifli hale getirmek için {installationName} içinde yapabileceğiniz birkaç şey var.",
+    "GREETING_MORNING": "👋 Good morning, {name}. Welcome to {installationName}.",
+    "GREETING_AFTERNOON": "👋 Good afternoon, {name}. Welcome to {installationName}.",
+    "GREETING_EVENING": "👋 Good evening, {name}. Welcome to {installationName}.",
+    "READ_LATEST_UPDATES": "En Son Güncellemeleri Okuyun",
+    "ALL_CONVERSATION": {
+      "TITLE": "Tüm Konuşmalarınız Bir Arada",
+      "DESCRIPTION": "Müşterilerinizden gelen tüm konuşmaları tek bir gösterge panelinde görüntüleyin. Gelen kanala, etikete ve duruma göre konuşmaları filtreleyebilirsiniz.",
+      "NEW_LINK": "Bir gelen kutusu oluşturmak için buraya tıklayın"
+    },
+    "TEAM_MEMBERS": {
+      "TITLE": "Ekip Üyelerinizi Davet Edin",
+      "DESCRIPTION": "Müşterinizle konuşmaya hazırlanırken, ekibinizi yardıma çağırın. Ekibinizi, temsilci listesine e-posta adreslerini ekleyerek davet edebilirsiniz.",
+      "NEW_LINK": "Bir ekip üyesi davet etmek için buraya tıklayın"
+    },
+    "LABELS": {
+      "TITLE": "Etiketlerle Konuşmaları Düzenleyin",
+      "DESCRIPTION": "Etiketler, konuşmalarınızı kategorize etmenin daha kolay bir yolunu sağlar. #destek-soru, #fatura-sorunu vb. gibi etiketler oluşturun, böylece daha sonra bir konuşmada bunları kullanabilirsiniz.",
+      "NEW_LINK": "Etiket oluşturmak için buraya tıklayın"
+    },
+    "CANNED_RESPONSES": {
+      "TITLE": "Create canned responses",
+      "DESCRIPTION": "Pre-written quick reply templates help you quickly respond to a conversation. Agents can type the '/' character followed by the shortcode to insert a response.",
+      "NEW_LINK": "Click here to create a canned response"
+    }
+  },
+  "CONVERSATION_SIDEBAR": {
+    "ASSIGNEE_LABEL": "Atanan Temsilci",
+    "SELF_ASSIGN": "Bana Ata",
+    "TEAM_LABEL": "Atanan Takım",
+    "SELECT": {
+      "PLACEHOLDER": "Hiç"
+    },
+    "ACCORDION": {
+      "CONTACT_DETAILS": "İletişim Detayları",
+      "CONVERSATION_ACTIONS": "Konuşma Eylemleri",
+      "CONVERSATION_LABELS": "Konuşma Etiketleri",
+      "CONVERSATION_INFO": "Konuşma Bilgisi",
+      "CONTACT_NOTES": "Kişi Notları",
+      "CONTACT_ATTRIBUTES": "İletişim Nitelikleri",
+      "PREVIOUS_CONVERSATION": "Önceki Konuşmalar",
+      "MACROS": "Kısayollar",
+      "LINEAR_ISSUES": "Bağlantılı Linear Sorunları",
+      "SHOPIFY_ORDERS": "Shopify Orders",
+      "SHARED_FILES": "Attachments"
+    },
+    "SHARED_FILES": {
+      "EMPTY": "No attachments yet",
+      "DOWNLOAD": "Download file",
+      "DOWNLOAD_ERROR": "Could not download the file. Please try again.",
+      "MEDIA_HEADING": "Medya",
+      "FILES_HEADING": "Files",
+      "VIEW_ALL": "Tümünü Görüntüle",
+      "SHOW_LESS": "Show less",
+      "MORE_COUNT": "+{count}",
+      "UNTITLED_FILE": "Untitled file"
+    },
+    "SHOPIFY": {
+      "ORDER_ID": "Order #{id}",
+      "ERROR": "Error loading orders",
+      "NO_SHOPIFY_ORDERS": "No orders found",
+      "FINANCIAL_STATUS": {
+        "PENDING": "Bekliyor",
+        "AUTHORIZED": "Authorized",
+        "PARTIALLY_PAID": "Partially Paid",
+        "PAID": "Paid",
+        "PARTIALLY_REFUNDED": "Partially Refunded",
+        "REFUNDED": "Refunded",
+        "VOIDED": "Voided"
+      },
+      "FULFILLMENT_STATUS": {
+        "FULFILLED": "Fulfilled",
+        "PARTIALLY_FULFILLED": "Partially Fulfilled",
+        "UNFULFILLED": "Unfulfilled"
+      }
+    }
+  },
+  "CONVERSATION_CUSTOM_ATTRIBUTES": {
+    "ADD_BUTTON_TEXT": "Nitelik Oluştur",
+    "NO_RECORDS_FOUND": "Nitelik bulunamadı",
+    "UPDATE": {
+      "SUCCESS": "Öznitelik başarıyla güncellendi",
+      "ERROR": "Öznitelik güncellenemedi. Lütfen daha sonra tekrar deneyiniz"
+    },
+    "ADD": {
+      "TITLE": "Ekle",
+      "SUCCESS": "Öznitelik başarıyla eklendi",
+      "ERROR": "Öznitelik eklenemedi. Lütfen daha sonra tekrar deneyiniz"
+    },
+    "DELETE": {
+      "SUCCESS": "Öznitelik başarıyla silindi",
+      "ERROR": "Öznitelik silinemedi. Lütfen daha sonra tekrar deneyiniz"
+    },
+    "ATTRIBUTE_SELECT": {
+      "TITLE": "Özellik Ekle",
+      "PLACEHOLDER": "Öznitelik ara",
+      "NO_RESULT": "Öznitelik bulunamadı"
+    }
+  },
+  "EMAIL_HEADER": {
+    "FROM": "Kimden",
+    "TO": "Kime",
+    "BCC": "Gizli Kopya",
+    "CC": "Kopya",
+    "SUBJECT": "Konu",
+    "EXPAND": "Expand email"
+  },
+  "CONVERSATION_PARTICIPANTS": {
+    "SIDEBAR_MENU_TITLE": "Katılımcılar",
+    "SIDEBAR_TITLE": "Konuşma Katılımcıları",
+    "NO_RECORDS_FOUND": "Kayıt bulunamadı",
+    "ADD_PARTICIPANTS": "Katılımcıları Seç",
+    "REMANING_PARTICIPANTS_TEXT": "+{count} diğer",
+    "REMANING_PARTICIPANT_TEXT": "+{count} diğer",
+    "TOTAL_PARTICIPANTS_TEXT": "{count} kişi katılıyor.",
+    "TOTAL_PARTICIPANT_TEXT": "{count} kişi katılıyor.",
+    "NO_PARTICIPANTS_TEXT": "Kimse katılmıyor!",
+    "WATCH_CONVERSATION": "Konuşmaya Katıl",
+    "YOU_ARE_WATCHING": "Katılıyorsunuz",
+    "API": {
+      "ERROR_MESSAGE": "Güncellenemedi, tekrar deneyin!",
+      "SUCCESS_MESSAGE": "Katılımcılar güncellendi!"
+    }
+  },
+  "TRANSLATE_MODAL": {
+    "TITLE": "Çevrili İçeriği Görüntüle",
+    "DESC": "İçeriği her dilde çevrilen şekilde görüntüleyebilirsiniz.",
+    "ORIGINAL_CONTENT": "Orijinal İçerik",
+    "TRANSLATED_CONTENT": "Çevrilen İçerik",
+    "NO_TRANSLATIONS_AVAILABLE": "Bu için çeviri mevcut değil"
+  },
+  "TYPING": {
+    "ONE": "{user} is typing",
+    "TWO": "{user} and {secondUser} are typing",
+    "MULTIPLE": "{user} and {count} others are typing"
+  },
+  "COPILOT": {
+    "TRY_THESE_PROMPTS": "Bu komutları deneyin"
+  },
+  "GALLERY_VIEW": {
+    "ERROR_DOWNLOADING": "Unable to download attachment. Please try again"
+  }
+}

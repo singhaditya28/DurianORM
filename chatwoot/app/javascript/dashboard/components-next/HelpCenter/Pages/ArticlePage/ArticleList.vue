@@ -1,0 +1,232 @@
+<script setup>
+import { ref, computed, watch } from 'vue';
+import Draggable from 'vuedraggable';
+import { useMapGetter, useStore } from 'dashboard/composables/store.js';
+import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import { useAlert, useTrack } from 'dashboard/composables';
+import { PORTALS_EVENTS } from 'dashboard/helper/AnalyticsHelper/events';
+import { getArticleStatus } from 'dashboard/helper/portalHelper.js';
+import wootConstants from 'dashboard/constants/globals';
+
+import ArticleCard from 'dashboard/components-next/HelpCenter/ArticleCard/ArticleCard.vue';
+
+const props = defineProps({
+  articles: {
+    type: Array,
+    required: true,
+  },
+  isCategoryArticles: {
+    type: Boolean,
+    default: false,
+  },
+  selectedArticleIds: {
+    type: Set,
+    default: () => new Set(),
+  },
+});
+
+const emit = defineEmits(['translateArticle', 'toggleSelect']);
+
+const { ARTICLE_STATUS_TYPES } = wootConstants;
+
+const router = useRouter();
+const route = useRoute();
+const store = useStore();
+const { t } = useI18n();
+
+const localArticles = ref(props.articles);
+const hoveredArticleId = ref(null);
+
+const dragEnabled = computed(() => {
+  return (
+    props.isCategoryArticles &&
+    localArticles.value?.length > 1 &&
+    props.selectedArticleIds.size === 0
+  );
+});
+
+const hasBulkSelection = computed(() => props.selectedArticleIds.size > 0);
+
+const shouldShowSelectionControl = id => {
+  return hoveredArticleId.value === id || hasBulkSelection.value;
+};
+
+const handleCardHover = (isHovered, id) => {
+  hoveredArticleId.value = isHovered ? id : null;
+};
+
+const getCategoryById = useMapGetter('categories/categoryById');
+
+const openArticle = id => {
+  const { tab, categorySlug, locale } = route.params;
+  if (props.isCategoryArticles) {
+    router.push({
+      name: 'portals_categories_articles_edit',
+      params: { articleSlug: id },
+    });
+  } else {
+    router.push({
+      name: 'portals_articles_edit',
+      params: {
+        articleSlug: id,
+        tab,
+        categorySlug,
+        locale,
+      },
+    });
+  }
+};
+
+const onReorder = async reorderedGroup => {
+  try {
+    await store.dispatch('articles/reorder', {
+      reorderedGroup,
+      portalSlug: route.params.portalSlug,
+    });
+  } catch {
+    useAlert(t('HELP_CENTER.REORDER_ARTICLE.API.ERROR_MESSAGE'));
+  }
+};
+
+const onDragEnd = () => {
+  // Collect and sort existing positions, falling back to index+1 for null/0 values
+  const sortedArticlePositions = localArticles.value
+    .map((article, index) => article.position || index + 1)
+    .sort((a, b) => a - b);
+
+  const orderedArticles = localArticles.value.map(article => article.id);
+
+  // Create a map of article IDs to their new positions
+  const reorderedGroup = orderedArticles.reduce((obj, key, index) => {
+    obj[key] = sortedArticlePositions[index];
+    return obj;
+  }, {});
+
+  onReorder(reorderedGroup);
+};
+
+const getCategory = categoryId => {
+  return getCategoryById.value(categoryId) || { name: '', icon: '' };
+};
+
+const getStatusMessage = (status, isSuccess) => {
+  const messageType = isSuccess ? 'SUCCESS' : 'ERROR';
+  const statusMap = {
+    [ARTICLE_STATUS_TYPES.PUBLISH]: 'PUBLISH_ARTICLE',
+    [ARTICLE_STATUS_TYPES.ARCHIVE]: 'ARCHIVE_ARTICLE',
+    [ARTICLE_STATUS_TYPES.DRAFT]: 'DRAFT_ARTICLE',
+  };
+
+  return statusMap[status]
+    ? t(`HELP_CENTER.${statusMap[status]}.API.${messageType}`)
+    : '';
+};
+
+const updatePortalMeta = () => {
+  const { portalSlug, locale } = route.params;
+  return store.dispatch('portals/show', { portalSlug, locale });
+};
+
+const updateArticlesMeta = () => {
+  const { portalSlug, locale } = route.params;
+  return store.dispatch('articles/updateArticleMeta', {
+    portalSlug,
+    locale,
+  });
+};
+
+const handleArticleAction = async (action, { status, id }) => {
+  const { portalSlug } = route.params;
+  try {
+    if (action === 'delete') {
+      await store.dispatch('articles/delete', {
+        portalSlug,
+        articleId: id,
+      });
+      useAlert(t('HELP_CENTER.DELETE_ARTICLE.API.SUCCESS_MESSAGE'));
+    } else {
+      await store.dispatch('articles/update', {
+        portalSlug,
+        articleId: id,
+        status,
+      });
+      useAlert(getStatusMessage(status, true));
+
+      if (status === ARTICLE_STATUS_TYPES.ARCHIVE) {
+        useTrack(PORTALS_EVENTS.ARCHIVE_ARTICLE, { uiFrom: 'header' });
+      } else if (status === ARTICLE_STATUS_TYPES.PUBLISH) {
+        useTrack(PORTALS_EVENTS.PUBLISH_ARTICLE);
+      }
+    }
+    await updateArticlesMeta();
+    await updatePortalMeta();
+  } catch (error) {
+    const errorMessage =
+      error?.message ||
+      (action === 'delete'
+        ? t('HELP_CENTER.DELETE_ARTICLE.API.ERROR_MESSAGE')
+        : getStatusMessage(status, false));
+    useAlert(errorMessage);
+  }
+};
+
+const updateArticle = ({ action, value, id }) => {
+  if (action === 'translate') {
+    emit('translateArticle', id);
+    return;
+  }
+  const status = action !== 'delete' ? getArticleStatus(value) : null;
+  handleArticleAction(action, { status, id });
+};
+
+// Watch for changes in the articles prop and update the localArticles ref
+watch(
+  () => props.articles,
+  newArticles => {
+    localArticles.value = newArticles;
+  },
+  { deep: true }
+);
+</script>
+
+<template>
+  <Draggable
+    v-model="localArticles"
+    :disabled="!dragEnabled"
+    item-key="id"
+    tag="ul"
+    ghost-class="article-ghost-class"
+    class="w-full h-full space-y-4"
+    @end="onDragEnd"
+  >
+    <template #item="{ element }">
+      <li class="list-none rounded-2xl">
+        <ArticleCard
+          :id="element.id"
+          :key="element.id"
+          :title="element.title"
+          :status="element.status"
+          :author="element.author"
+          :category="getCategory(element.category.id)"
+          :views="element.views || 0"
+          :updated-at="element.updatedAt"
+          :is-selected="selectedArticleIds.has(element.id)"
+          selectable
+          :show-selection-control="shouldShowSelectionControl(element.id)"
+          :class="{ 'cursor-grab': dragEnabled }"
+          @open-article="openArticle"
+          @article-action="updateArticle"
+          @toggle-select="emit('toggleSelect', $event)"
+          @hover="isHovered => handleCardHover(isHovered, element.id)"
+        />
+      </li>
+    </template>
+  </Draggable>
+</template>
+
+<style lang="scss" scoped>
+.article-ghost-class {
+  @apply opacity-50 bg-n-solid-1;
+}
+</style>
